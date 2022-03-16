@@ -6,11 +6,8 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
-
-<h1>Detalles</h1>
-
 <div>
-    <h4>País</h4>
+    <h4>Detalles del País</h4>
     <partial name="_CountryDetails" />
 </div>
 <div>
@@ -27,7 +24,7 @@
             </div>
             <div class="panel-body">
                 <p>
-                    <a class="btn btn-outline-primary" asp-action="CreateState" asp-route-id="@Model?.Id">Crear nuevo</a>
+                    <a class="btn btn-outline-primary" asp-action="CreateState" asp-route-id="@Model?.Id">Crear Departamento/Estado</a>
                 </p>
                 <table class="table" id="MyTable">
                     <thead>
