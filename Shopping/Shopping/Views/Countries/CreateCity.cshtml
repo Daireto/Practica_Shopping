@@ -1,0 +1,26 @@
+﻿@model Shopping.Models.CityViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Crear nuevo</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateCity">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="StateId" />
+            <partial name="_City" />
+            <div class="form-group mt-2">
+                <input type="submit" value="Crear ciudad" class="btn btn-outline-primary" />
+                <a class="btn btn-outline-success" asp-action="DetailsState" asp-route-id="@Model?.StateId">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
