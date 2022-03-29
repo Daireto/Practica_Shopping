@@ -101,6 +101,7 @@ namespace Shopping.Controllers
             }
 
             Country country = await _context.Countries
+                .Include(c => c.States)
                 .FirstOrDefaultAsync(c => c.Id == id);
             if (country == null)
             {
@@ -171,9 +172,7 @@ namespace Shopping.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Country country = await _context.Countries
-                //.Include(c => c.States) con el include permite eliminar países que tengan estados
-                .FirstOrDefaultAsync(c => c.Id == id);
+            Country country = await _context.Countries.FindAsync(id);
             _context.Countries.Remove(country);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -193,7 +192,6 @@ namespace Shopping.Controllers
                 .Include(s => s.Country)
                 .Include(s => s.Cities)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (state == null)
             {
                 return NotFound();
@@ -216,17 +214,11 @@ namespace Shopping.Controllers
                 return NotFound();
             }
 
-            State state = new()
+            StateViewModel model = new()
             {
-                Country = country,
-                Cities = new List<City>()
+                CountryId = country.Id
             };
-
-            //StateViewModel model = new()
-            //{
-            //    CountryId = country.Id
-            //};
-            return View(state);
+            return View(model);
         }
 
         //Create POST: Countries/CreateState
@@ -234,15 +226,21 @@ namespace Shopping.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateState(State state)
+        public async Task<IActionResult> CreateState(StateViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    State state = new()
+                    {
+                        Name = model.Name,
+                        Country = await _context.Countries.FindAsync(model.CountryId),
+                        Cities = new List<City>()
+                    };
                     _context.Add(state);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Details), new { Id = state.Country.Id });
+                    return RedirectToAction(nameof(Details), new { Id = model.CountryId });
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -260,7 +258,7 @@ namespace Shopping.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(state);
+            return View(model);
         }
 
         //Edit GET: Countries/EditState/5
@@ -279,13 +277,13 @@ namespace Shopping.Controllers
                 return NotFound();
             }
 
-            //StateViewModel model = new()
-            //{
-            //    Id = state.Id,
-            //    Name = state.Name,
-            //    CountryId = state.Country.Id
-            //};
-            return View(state);
+            StateViewModel model = new()
+            {
+                Id = state.Id,
+                Name = state.Name,
+                CountryId = state.Country.Id
+            };
+            return View(model);
         }
 
         //Edit POST: Countries/EditState/5
@@ -293,9 +291,9 @@ namespace Shopping.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditState(int id, State state)
+        public async Task<IActionResult> EditState(int id, StateViewModel model)
         {
-            if (id != state.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -304,9 +302,15 @@ namespace Shopping.Controllers
             {
                 try
                 {
+                    State state = new()
+                    {
+                        Id = model.Id,
+                        Name = model.Name,
+                    };
+
                     _context.Update(state);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Details), new { Id = model.CountryId });
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -324,7 +328,7 @@ namespace Shopping.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(state);
+            return View(model);
         }
 
         //Delete GET: Countries/DeleteState/5
@@ -352,6 +356,7 @@ namespace Shopping.Controllers
         public async Task<IActionResult> DeleteConfirmedState(int id)
         {
             State state = await _context.States
+                .Include(s => s.Country)
                 .FirstOrDefaultAsync(s => s.Id == id);
             _context.States.Remove(state);
             await _context.SaveChangesAsync();
