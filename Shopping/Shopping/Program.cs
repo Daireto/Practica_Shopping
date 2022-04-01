@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
+using Shopping.Data.Entities;
+using Shopping.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +13,29 @@ builder.Services.AddDbContext<DataContext>(o =>
     o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+//TODO: Make strongest password
+//User configuration
+builder.Services.AddIdentity<User, IdentityRole>(cfg =>
+{
+    cfg.User.RequireUniqueEmail = true;
+    cfg.Password.RequireDigit = false;
+    cfg.Password.RequiredUniqueChars = 0;
+    cfg.Password.RequireLowercase = false;
+    cfg.Password.RequireNonAlphanumeric = false;
+    cfg.Password.RequireUppercase = false;
+}).AddEntityFrameworkStores<DataContext>();
+
+//TODO: Create the NotAuthorized method at Account controller
+//Not authorized actions configuration
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.LoginPath = "/Account/NotAuthorized";
+//    options.AccessDeniedPath = "/Account/NotAuthorized";
+//});
+
+//Inyections
 builder.Services.AddTransient<SeedDb>(); //Database feeder
+builder.Services.AddScoped<IUserHelper, UserHelper>(); //User helper
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
@@ -34,10 +59,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/error/{0}"); //Use this route for error pages
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication(); //Authentication for Users
 
 app.UseAuthorization();
 
