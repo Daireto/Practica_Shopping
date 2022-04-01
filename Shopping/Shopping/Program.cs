@@ -25,13 +25,12 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
     cfg.Password.RequireUppercase = false;
 }).AddEntityFrameworkStores<DataContext>();
 
-//TODO: Create the NotAuthorized method at Account controller
 //Not authorized actions configuration
-//builder.Services.ConfigureApplicationCookie(options =>
-//{
-//    options.LoginPath = "/Account/NotAuthorized";
-//    options.AccessDeniedPath = "/Account/NotAuthorized";
-//});
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/NotAuthorized";
+    options.AccessDeniedPath = "/Account/NotAuthorized";
+});
 
 //Inyections
 builder.Services.AddTransient<SeedDb>(); //Database feeder
