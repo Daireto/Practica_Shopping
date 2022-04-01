@@ -13,6 +13,11 @@ namespace Shopping.Controllers
             _userHelper = userHelper;
         }
 
+        public IActionResult NotAuthorized()
+        {
+            return View();
+        }
+
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
