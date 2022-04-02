@@ -25,10 +25,32 @@ namespace Shopping.Helpers
             return await _userManager.CreateAsync(user, password);
         }
 
-        //public Task<User> AddUserAsync(AddUserViewModel model)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public async Task<User> AddUserAsync(AddUserViewModel model, Guid imageId)
+        {
+            User user = new()
+            {
+                Address = model.Address,
+                Document = model.Document,
+                Email = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                ImageId = imageId,
+                PhoneNumber = model.PhoneNumber,
+                City = await _context.Cities.FindAsync(model.CityId),
+                UserName = model.Username,
+                UserType = model.UserType
+            };
+
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                return null;
+            }
+
+            User user2 = await GetUserAsync(model.Username);
+            await AddUserToRoleAsync(user2, user.UserType.ToString());
+            return user2;
+        }
 
         public async Task AddUserToRoleAsync(User user, string roleName)
         {
@@ -53,11 +75,6 @@ namespace Shopping.Helpers
                 .Include(u => u.City)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
-
-        //public async Task<User> GetUserAsync(Guid userId)
-        //{
-            
-        //}
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {

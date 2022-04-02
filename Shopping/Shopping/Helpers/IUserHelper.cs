@@ -7,8 +7,7 @@ namespace Shopping.Helpers
     public interface IUserHelper
     {
         Task<IdentityResult> AddUserAsync(User user, string password);
-        //Task<User> AddUserAsync(AddUserViewModel model);
-        //TODO: Implement AddUserViewModel
+        Task<User> AddUserAsync(AddUserViewModel model, Guid imageId);
         Task AddUserToRoleAsync(User user, string roleName);
         Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
         Task CheckRoleAsync(string roleName);

@@ -29,7 +29,7 @@ namespace Shopping.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         
-        //Errors
+        //Specific errors methods
         [Route("error/404")]
         public IActionResult Error404()
         {
