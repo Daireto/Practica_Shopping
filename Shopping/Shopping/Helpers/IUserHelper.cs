@@ -12,12 +12,10 @@ namespace Shopping.Helpers
         Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword);
         Task CheckRoleAsync(string roleName);
         Task<User> GetUserAsync(string email);
-        //Task<User> GetUserAsync(Guid userId);
-        //TODO: Implement GetUserAsync by Guid
+        Task<User> GetUserAsync(Guid userId);
         Task<bool> IsUserInRoleAsync(User user, string roleName);
         Task<SignInResult> LoginAsync(LoginViewModel model);
         Task LogoutAsync();
         Task<IdentityResult> UpdateUserAsync(User user);
-
     }
 }

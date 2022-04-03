@@ -73,7 +73,18 @@ namespace Shopping.Helpers
         {
             return await _context.Users
                 .Include(u => u.City)
+                .ThenInclude(c => c.State)
+                .ThenInclude(s => s.Country)
                 .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User> GetUserAsync(Guid userId)
+        {
+            return await _context.Users
+                .Include(u => u.City)
+                .ThenInclude(c => c.State)
+                .ThenInclude(s => s.Country)
+                .FirstOrDefaultAsync(u => u.Id == userId.ToString());
         }
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
@@ -87,7 +98,7 @@ namespace Shopping.Helpers
                 model.Username,
                 model.Password,
                 model.RememberMe,
-                false); //With try limits
+                true); //With try limits
         }
 
         public async Task LogoutAsync()

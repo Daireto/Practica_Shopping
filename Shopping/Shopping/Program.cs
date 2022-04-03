@@ -23,6 +23,9 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
     cfg.Password.RequireLowercase = false;
     cfg.Password.RequireNonAlphanumeric = false;
     cfg.Password.RequireUppercase = false;
+    cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(5);
+    cfg.Lockout.MaxFailedAccessAttempts = 3;
+    cfg.Lockout.AllowedForNewUsers = true;
 }).AddEntityFrameworkStores<DataContext>();
 
 //Not authorized actions configuration
@@ -46,10 +49,10 @@ var app = builder.Build();
 SeedData();
 void SeedData()
 {
-    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-    using (IServiceScope? scope = scopedFactory.CreateScope())
+    IServiceScopeFactory scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using (IServiceScope scope = scopedFactory.CreateScope())
     {
-        SeedDb? service = scope.ServiceProvider.GetService<SeedDb>();
+        SeedDb service = scope.ServiceProvider.GetService<SeedDb>();
         service.SeedAsync().Wait();
     }
 }
