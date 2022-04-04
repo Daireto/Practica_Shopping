@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Shopping.Migrations
 {
-    public partial class DatabaseWithUsers : Migration
+    public partial class DatabaseWithUsersAndLocation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

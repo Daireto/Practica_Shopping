@@ -12,8 +12,8 @@ using Shopping.Data;
 namespace Shopping.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220331030150_DatabaseWithUsers")]
-    partial class DatabaseWithUsers
+    [Migration("20220403223136_DatabaseWithUsersAndLocation")]
+    partial class DatabaseWithUsersAndLocation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

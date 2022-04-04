@@ -47,13 +47,5 @@ namespace Shopping.Helpers
             await blockBlob.UploadFromStreamAsync(stream);
             return name;
         }
-
-        //Method for SeedDb: Deletes and creates the containers
-        public async Task GetContainerEmpty(string containerName)
-        {
-            CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
-            await container.DeleteAsync();
-            await container.CreateIfNotExistsAsync();
-        }
     }
 }

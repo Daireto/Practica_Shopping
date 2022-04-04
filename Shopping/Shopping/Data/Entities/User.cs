@@ -8,7 +8,7 @@ namespace Shopping.Data.Entities
     {
         //IdentityUser properties including the following properties:
 
-        [Display(Name = "Documento")]
+        [Display(Name = "DNI")]
         [MaxLength(20, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Document { get; set; }
@@ -37,7 +37,7 @@ namespace Shopping.Data.Entities
             ? $"https://localhost:7280/images/noimage.png"
             : $"https://practicashopping.blob.core.windows.net/users/{ImageId}";
 
-        [Display(Name = "Tipo de usuario")]
+        [Display(Name = "Rol")]
         public UserType UserType { get; set; }
 
         [Display(Name = "Ciudad")]
