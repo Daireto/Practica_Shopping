@@ -17,6 +17,8 @@ builder.Services.AddDbContext<DataContext>(o =>
 //User configuration
 builder.Services.AddIdentity<User, IdentityRole>(cfg =>
 {
+    cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    cfg.SignIn.RequireConfirmedEmail = true;
     cfg.User.RequireUniqueEmail = true;
     cfg.Password.RequireDigit = false;
     cfg.Password.RequiredUniqueChars = 0;
@@ -26,7 +28,9 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
     cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(5);
     cfg.Lockout.MaxFailedAccessAttempts = 3;
     cfg.Lockout.AllowedForNewUsers = true;
-}).AddEntityFrameworkStores<DataContext>();
+})
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<DataContext>();
 
 //Not authorized actions configuration
 builder.Services.ConfigureApplicationCookie(options =>
@@ -40,6 +44,7 @@ builder.Services.AddTransient<SeedDb>(); //Database feeder
 builder.Services.AddScoped<IUserHelper, UserHelper>(); //User helper
 builder.Services.AddScoped<ICombosHelper, CombosHelper>(); //Combos helper
 builder.Services.AddScoped<IBlobHelper, BlobHelper>(); //Blob helper
+builder.Services.AddScoped<IMailHelper, MailHelper>(); //Mail helper
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
