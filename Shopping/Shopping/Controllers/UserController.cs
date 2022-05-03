@@ -6,6 +6,7 @@ using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Helpers;
 using Shopping.Models;
+using Vereyon.Web;
 
 namespace Shopping.Controllers
 {
@@ -17,15 +18,17 @@ namespace Shopping.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IMailHelper _mailHelper;
+        private readonly IFlashMessage _flashMessage;
 
         public UserController(DataContext context, IUserHelper userHelper, ICombosHelper combosHelper, IBlobHelper blobHelper,
-            IMailHelper mailHelper)
+            IMailHelper mailHelper, IFlashMessage flashMessage)
         {
             _context = context;
             _userHelper = userHelper;
             _combosHelper = combosHelper;
             _blobHelper = blobHelper;
             _mailHelper = mailHelper;
+            _flashMessage = flashMessage;
         }
         public async Task<IActionResult> Index()
         {
@@ -66,7 +69,7 @@ namespace Shopping.Controllers
                 User user = await _userHelper.AddUserAsync(model, imageId);
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Este correo ya está en uso");
+                    _flashMessage.Danger("Este correo ya está en uso");
                     return View(model);
                 }
 
@@ -86,11 +89,11 @@ namespace Shopping.Controllers
                         $"<p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
                 if (response.IsSuccess)
                 {
-                    ViewBag.Message = "Las instrucciones para habilitar el usuario han sido enviadas al correo";
+                    _flashMessage.Info("Las instrucciones para habilitar el usuario han sido enviadas al correo");
                     return View(model);
                 }
 
-                ModelState.AddModelError(string.Empty, response.Message);
+                _flashMessage.Danger(response.Message);
 
             }
             return View(model);

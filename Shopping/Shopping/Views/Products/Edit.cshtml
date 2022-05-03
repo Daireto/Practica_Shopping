@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-12">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <flash dismissable="true" />
             <input type="hidden" asp-for="Id" />
             <partial name="_EditProduct"/>
             <div class="form-group mt-2">

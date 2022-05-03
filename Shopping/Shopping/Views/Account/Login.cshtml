@@ -11,7 +11,7 @@
     <div class="col-md-4">
         <h3>Iniciar Sesión</h3>
         <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <flash dismissable="true" />
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
                 <input asp-for="Username" class="form-control" />

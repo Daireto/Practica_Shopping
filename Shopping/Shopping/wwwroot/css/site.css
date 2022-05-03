@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 html {
   font-size: 14px;
 }
@@ -15,4 +17,47 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.card_title {
+    font-size: 24px;
+    padding: 10px 10px 0 10px;
+}
+
+.card_body {
+    padding: 10px;
+}
+
+.card_foot {
+    background: #6699ff;
+    border-radius: 0 0 15px 15px;
+    padding: 10px;
+    text-align: center;
+}
+
+.foot a {
+    text-decoration: none;
+    color: white;
+}
+
+    .foot a:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        content: ""
+    }
+
+.carousel-inner {
+    width: auto;
+    height: 500px;
+    max-height: 500px !important;
+}
+
+.carousel-content {
+    color: black;
+    display: flex;
+    text-align: center;
 }

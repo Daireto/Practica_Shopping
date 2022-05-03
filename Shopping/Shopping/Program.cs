@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Helpers;
+using Vereyon.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,8 +46,11 @@ builder.Services.AddScoped<IUserHelper, UserHelper>(); //User helper
 builder.Services.AddScoped<ICombosHelper, CombosHelper>(); //Combos helper
 builder.Services.AddScoped<IBlobHelper, BlobHelper>(); //Blob helper
 builder.Services.AddScoped<IMailHelper, MailHelper>(); //Mail helper
+builder.Services.AddScoped<IOrdersHelper, OrdersHelper>(); //Orders helper
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+builder.Services.AddFlashMessage();
 
 var app = builder.Build();
 
@@ -55,11 +59,9 @@ SeedData();
 void SeedData()
 {
     IServiceScopeFactory scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-    using (IServiceScope scope = scopedFactory.CreateScope())
-    {
-        SeedDb service = scope.ServiceProvider.GetService<SeedDb>();
-        service.SeedAsync().Wait();
-    }
+    using IServiceScope scope = scopedFactory.CreateScope();
+    SeedDb service = scope.ServiceProvider.GetService<SeedDb>();
+    service.SeedAsync().Wait();
 }
 
 if (!app.Environment.IsDevelopment())

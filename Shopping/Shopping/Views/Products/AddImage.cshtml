@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-12">
         <form asp-action="AddImage" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <flash dismissable="true" />
             <input type="hidden" asp-for="ProductId" />
             <div class="form-group">
                 <label asp-for="ImageFile" class="control-label"></label>

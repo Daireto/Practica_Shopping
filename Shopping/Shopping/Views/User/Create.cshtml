@@ -15,7 +15,7 @@
             </h3>
         </div>
         <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <flash dismissable="true" />
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="UserType" />
             <input type="hidden" asp-for="Countries" />
